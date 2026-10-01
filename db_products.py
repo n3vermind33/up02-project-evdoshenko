@@ -1,75 +1,129 @@
-"""Загрузка товаров из БД с расширенным выводом."""
+"""Загрузка товаров из БД в объекты класса Product."""
 import sqlite3
 from config import DB_PATH
+from models import Product
 
 
 def get_all_products():
+    """Возвращает список объектов Product из БД."""
     conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
     cur.execute("SELECT * FROM Товар ORDER BY id")
-    products = cur.fetchall()
+    rows = cur.fetchall()
     conn.close()
+
+    products = []
+    for row in rows:
+        product = Product(
+            product_id=row[0],
+            country=row[1],
+            city=row[2],
+            duration=row[3],
+            price=row[4],
+            quantity=row[5]
+        )
+        products.append(product)
     return products
 
 
-def get_products_by_city(city):
-    """Товары по городу."""
+def get_products_by_duration(duration):
+    """Возвращает товары с указанной длительностью поездки."""
     conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
-    cur.execute("SELECT * FROM Товар WHERE категория = ?", (city,))
-    products = cur.fetchall()
+    cur.execute("SELECT * FROM Товар WHERE длительность = ?", (duration,))
+    rows = cur.fetchall()
     conn.close()
+
+    products = []
+    for row in rows:
+        product = Product(
+            product_id=row[0],
+            country=row[1],
+            city=row[2],
+            duration=row[3],
+            price=row[4],
+            quantity=row[5]
+        )
+        products.append(product)
     return products
+
+
+def get_all_durations():
+    """Возвращает список уникальных значений длительности из БД."""
+    conn = sqlite3.connect(DB_PATH)
+    cur = conn.cursor()
+    cur.execute("SELECT DISTINCT длительность FROM Товар ORDER BY длительность")
+    rows = cur.fetchall()
+    conn.close()
+    return [row[0] for row in rows]
 
 
 def get_products_low_stock():
-    """Товары с количеством ≤ 6."""
+    """Возвращает товары с количеством ≤ 3."""
     conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
-    cur.execute("SELECT * FROM Товар WHERE количество <= 6")
-    products = cur.fetchall()
+    cur.execute("SELECT * FROM Товар WHERE количество <= 3")
+    rows = cur.fetchall()
     conn.close()
+
+    products = []
+    for row in rows:
+        product = Product(
+            product_id=row[0],
+            country=row[1],
+            city=row[2],
+            duration=row[3],
+            price=row[4],
+            quantity=row[5]
+        )
+        products.append(product)
     return products
 
 
-def get_cities():
-    """Список всех городов."""
-    conn = sqlite3.connect(DB_PATH)
-    cur = conn.cursor()
-    cur.execute("SELECT DISTINCT страна FROM Товар ORDER BY страна")
-    cities = [row[0] for row in cur.fetchall()]
-    conn.close()
-    return cities
+def print_products(products):
+    """Выводит информацию о товарах."""
+    print(f"\nВсего товаров: {len(products)}\n")
+    for p in products:
+        print(p.info())
+        print("-" * 60)
 
 
-def print_catalog(products):
-    """Каталог с индикатором."""
-    print(f"\n{'=' * 60}")
+def print_catalog_with_highlight(products):
+    """Выводит каталог с подсветкой для товаров ≤3."""
+    print(f"\n{'=' * 70}")
     print(f"КАТАЛОГ ({len(products)} товаров)")
-    print("=" * 60)
+    print("=" * 70)
 
     for p in products:
-        country = p[1]
-        city = p[2]
-        price = p[4]
-        amount = p[5]
+        highlight = "⚠️" if int(p.quantity) <= 3 else "  "
+        print(f"{highlight} {p.info()}")
 
-        indicator = "много" if amount > 6 else "мало"
-        highlight = "⚠️" if amount <= 3 else "  "
+    print("=" * 70)
 
-        print(f"{highlight} {country} ({city})")
-        print(f"   Цена: {price} руб. | Кол-во: {amount} ({indicator})")
 
-    print("=" * 60)
+def total_price_all(products):
+    """Считает общую стоимость всех товаров (цена × количество)."""
+    total = 0
+    for p in products:
+        total += float(p.price) * int(p.quantity)
+    return total
 
 
 if __name__ == "__main__":
-    print("1. Все товары")
-    print_catalog(get_all_products())
+    all_products = get_all_products()
 
-    print("\n2. Города:")
-    for cat in get_cities():
-        print(f"   - {cat}")
+    print("1. Все товары:")
+    print_catalog_with_highlight(all_products)
 
-    print("\n3. Товары с низким остатком (≤6):")
-    print_catalog(get_products_low_stock())
+    print("\n2. Товары с одинаковой длительностью:")
+    durations = get_all_durations()
+    print(f"Доступные варианты длительности: {durations}")
+
+    for d in durations:
+        print(f"\n--- Длительность: {d} ---")
+        print_catalog_with_highlight(get_products_by_duration(d))
+
+    print("\n3. Товары с низким остатком (≤3):")
+    print_catalog_with_highlight(get_products_low_stock())
+
+    print(f"\n4. Общая стоимость всех товаров: {total_price_all(all_products):.2f} руб.")
