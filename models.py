@@ -9,16 +9,17 @@ class Product:
         Инициализация товара.
 
         :param product_id: идентификатор
-        :param name: название
-        :param category: категория
+        :param country: страна
+        :param city: город
         :param price: цена
         :param quantity: количество
+        :param duration: длительность поездки
         """
         self.id = product_id
         self.country = country
         self.city = city
-        self.price = price
-        self.quantity = quantity
+        self.price = float(price)
+        self.quantity = int(quantity)
         self.duration = duration
 
     def total(self):
@@ -33,10 +34,56 @@ class Product:
         """Индикатор «много/мало» (порог 5)."""
         return "много" if self.quantity > 5 else "мало"
 
+    def is_available(self):
+        """Возвращает True, если товар есть в наличии (количество > 0)."""
+        return self.quantity > 0
+
     def info(self):
         """Строка с информацией о товаре."""
         return (
             f"{self.country} ({self.city}): "
-            f"{self.price} руб. × {self.quantity} = {self.total()} руб. "
+            f"{self.duration} дн. | "
+            f"{self.price} руб. × {self.quantity} = {self.total():.2f} руб. "
             f"({self.indicator()})"
+        )
+
+
+class Order:
+    """Класс Заказ."""
+
+    def __init__(self, order_id, date, client, product, quantity):
+        """
+        Инициализация заказа.
+
+        :param order_id: идентификатор заказа
+        :param date: дата заказа
+        :param client: имя клиента
+        :param product: объект Product
+        :param quantity: количество единиц товара в заказе
+        """
+        self.id = order_id
+        self.date = date
+        self.client = client
+        self.product = product
+        self.quantity = int(quantity)
+
+    def total(self):
+        """Стоимость заказа (цена товара × количество в заказе)."""
+        return self.product.price * self.quantity
+
+    def with_discount(self, discount_percent):
+        """Стоимость заказа со скидкой."""
+        return self.total() * (1 - discount_percent / 100)
+
+    def is_available(self):
+        """True, если товара хватает под заказ."""
+        return self.product.quantity >= self.quantity
+
+    def info(self):
+        """Строка с информацией о заказе."""
+        p = self.product
+        return (
+            f"Заказ №{self.id} от {self.date}: {self.client} — "
+            f"{p.country} ({p.city}), {p.duration} дн. × {self.quantity} "
+            f"= {self.total():.2f} руб."
         )
