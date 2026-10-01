@@ -1,5 +1,6 @@
 """Модели данных для проекта УП.02."""
-
+from datetime import datetime
+from discount import calculate_price_with_discount
 
 class Product:
     """Класс Товар."""
@@ -46,6 +47,26 @@ class Product:
             f"{self.price} руб. × {self.quantity} = {self.total():.2f} руб. "
             f"({self.indicator()})"
         )
+    
+    def total(self):
+        return self.price * self.quantity
+
+    def price_with_discount_auto(self, date=None):
+        """Цена со скидкой по алгоритму ДЭ."""
+        if date is None:
+            date = datetime.now()
+        return calculate_price_with_discount(self.id, self.price, date)
+
+    def indicator(self):
+        return "много" if self.quantity > 5 else "мало"
+
+    def info(self):
+        return (
+            f"{self.country} ({self.city}): "
+            f"{self.price} руб. × {self.quantity} = {self.total()} руб. "
+            f"({self.indicator()})"
+        )
+
 
 
 class Order:
@@ -87,3 +108,11 @@ class Order:
             f"{p.country} ({p.city}), {p.duration} дн. × {self.quantity} "
             f"= {self.total():.2f} руб."
         )
+        
+if __name__ == "__main__":
+    from datetime import datetime
+
+    p = Product(2, "Турция", "Анталья", 15000, 3, 7)
+    date = datetime(2026, 9, 15)
+    print(f"Базовая цена: {p.price}")
+    print(f"Со скидкой: {p.price_with_discount_auto(date)}")
