@@ -70,9 +70,15 @@ def has_orders_in_period(product_id, start_date, end_date):
     return False
 
 
-def calculate_price_with_discount(product_id, price, date):
+def calculate_price_with_discount(product_id, price, date, quantity=1):
     price = float(price)
+
+    if quantity < 0:
+        raise ValueError("Количество товара не может быть отрицательным")
+
     start, end = get_previous_month_range(date)
+
     if has_orders_in_period(product_id, start, end):
         return price
+
     return price * (1 - DISCOUNT_PERCENT / 100)
