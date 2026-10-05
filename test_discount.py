@@ -5,15 +5,33 @@ from discount import calculate_price_with_discount
 
 def run_tests():
     """Прогон тестов."""
-    date = datetime(2026, 10, 15)
 
     test_cases = [
-        # (id, цена, ожидание, пояснение)
-        (1, 50000,  50000,  "Тур 1 — есть брони в сентябре"),
-        (2, 150000, 150000, "Тур 2 — есть бронь"),
-        (3, 120000, 120000, "Тур 3 — есть брони"),
-        (4, 75000,  67500,  "Тур 4 — нет броней → 10% скидка"),
-        (5, 100000, 90000,  "Тур 5 — нет броней → 10% скидка"),
+        # (id, цена, дата расчёта, ожидание, пояснение)
+
+        (1, 50000, datetime(2026, 10, 15), 50000,
+         "Тур 1 — есть брони в сентябре"),
+
+        (2, 150000, datetime(2026, 10, 15), 150000,
+         "Тур 2 — есть бронь"),
+
+        (3, 120000, datetime(2026, 10, 15), 120000,
+         "Тур 3 — есть брони"),
+
+        (4, 75000, datetime(2026, 10, 15), 67500,
+         "Тур 4 — нет броней → 10% скидка"),
+
+        (5, 100000, datetime(2026, 10, 15), 90000,
+         "Тур 5 — нет броней → 10% скидка"),
+
+        (2, 60000, datetime(2026, 11, 15), 54000,
+         "В октябре заказов нет → 10% скидка"),
+
+        (1, 50000, datetime(2026, 11, 15), 45000, 
+         "Нет заказов → 10% скидка"),
+
+        (4, 90000, datetime(2026, 9, 1), 81000,
+         "Август — заказов нет"),
     ]
 
     print("=" * 60)
@@ -21,13 +39,23 @@ def run_tests():
     print("=" * 60)
 
     passed = 0
-    for product_id, price, expected, comment in test_cases:
-        result = calculate_price_with_discount(product_id, price, date)
+
+    for product_id, price, date, expected, comment in test_cases:
+        result = calculate_price_with_discount(
+            product_id,
+            price,
+            date
+        )
+
         status = "✅" if result == expected else "❌"
+
         if result == expected:
             passed += 1
-        print(f"{status} Тур {product_id}: {price} → {result} "
-              f"(ожидалось {expected}) — {comment}")
+
+        print(
+            f"{status} Тур {product_id}: {price} → {result} "
+            f"(ожидалось {expected}) — {comment}"
+        )
 
     print("=" * 60)
     print(f"Пройдено: {passed} / {len(test_cases)}")
