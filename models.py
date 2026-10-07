@@ -15,7 +15,7 @@ class Product:
         self.duration = duration
 
     def discounted_price(self):
-        return self.price * 0.9
+        return self.price * 0.80
 
 
     def total(self):
