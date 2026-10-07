@@ -14,6 +14,10 @@ class Product:
         self.quantity = int(quantity)
         self.duration = duration
 
+    def discounted_price(self):
+        return self.price * 0.9
+
+
     def total(self):
         return self.price * self.quantity
 
@@ -38,6 +42,8 @@ class Product:
             f"{self.price} руб. × {self.quantity} = {self.total():.2f} руб. "
             f"({self.indicator()})"
         )
+    
+    
 
 
 class Order:
