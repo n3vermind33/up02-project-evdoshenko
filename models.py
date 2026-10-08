@@ -72,6 +72,9 @@ class Order:
             f"= {self.total():.2f} руб."
         )
 
+    def order_info(self):
+        return f"Заказ №{self.id} от {self.date}: {self.client}"
+
 
 if __name__ == "__main__":
     p = Product(2, "Турция", "Анталья", 15000, 3, 7)
