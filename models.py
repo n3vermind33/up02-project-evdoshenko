@@ -6,13 +6,14 @@ from discount import calculate_price_with_discount
 class Product:
     """Класс Товар."""
 
-    def __init__(self, product_id, country, city, price, quantity, duration):
+    def __init__(self, product_id, country, city, price, quantity, duration, image):
         self.id = product_id
         self.country = country
         self.city = city
         self.price = float(price)
         self.quantity = int(quantity)
         self.duration = duration
+        self.image = image
         
     def is_available(self):
         """Товар доступен для заказа?"""
@@ -53,12 +54,13 @@ class Product:
 class Order:
     """Класс Заказ."""
 
-    def __init__(self, order_id, date, client, product, quantity):
+    def __init__(self, order_id, date, client, product, quantity, image):
         self.id = order_id
         self.date = date
         self.client = client
         self.product = product
         self.quantity = int(quantity)
+        self.image = image
 
     def total(self):
         return self.product.price * self.quantity

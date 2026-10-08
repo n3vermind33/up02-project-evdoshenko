@@ -3,6 +3,7 @@ import sqlite3
 from config import DB_PATH
 from models import Product
 
+IMAGE_DIR = "/resources"
 
 def get_all_products():
     """Возвращает список объектов Product из БД."""
@@ -20,7 +21,8 @@ def get_all_products():
             city=row[2],
             duration=row[3],
             price=row[4],
-            quantity=row[5]
+            quantity=row[5],
+            image=row[6]
         )
         products.append(product)
     return products
@@ -42,7 +44,8 @@ def get_products_by_duration(duration):
             city=row[2],
             duration=row[3],
             price=row[4],
-            quantity=row[5]
+            quantity=row[5],
+            image=row[6]
         )
         products.append(product)
     return products
@@ -74,7 +77,8 @@ def get_products_low_stock():
             city=row[2],
             duration=row[3],
             price=row[4],
-            quantity=row[5]
+            quantity=row[5],
+            image=row[6]
         )
         products.append(product)
     return products
