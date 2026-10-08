@@ -1,10 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
-from PIL import Image, ImageTk  # Добавлен импорт для работы с логотипом
-from config import APP_TITLE, FONT_FAMILY
+from config import COLOR_SECONDARY_BG, FONT_FAMILY #FONT_SIZE_TITLE, font
+from config import APP_TITLE
 import databases as db
 from catalog import create_product_card
-from db_products import get_all_products
+from resources import load_image_proportional, PATH_LOGO, PATH_ICON
 
 
 class CatalogWindow:
@@ -13,26 +13,48 @@ class CatalogWindow:
         self.root.title(APP_TITLE)
         self.root.geometry("900x700")
 
+        # Иконка приложения
+        self.set_icon()
+
         self.build_ui()
         self.load_products()
 
-    def build_ui(self):
-        # Заголовок
-        header = tk.Frame(self.root, bg="#D2F6E7")
-        header.pack(fill="x")
-        
-        # Добавление логотипа компании
+    def set_icon(self):
+        """Устанавливает иконку приложения (кроссплатформенно)."""
+        import os
         try:
-            logo = Image.open("resources/logo.jpg").resize((50, 50))
-            self.logo_photo = ImageTk.PhotoImage(logo)  # Сохраняем ссылку в self
-            tk.Label(header, image=self.logo_photo, bg="#D2F6E7").pack(side="left", padx=10, pady=10)
-        except Exception:
-            # Заглушка, если файл logo.png отсутствует
-            tk.Label(header, text="[ЛОГО]", font=(FONT_FAMILY, 10, "bold"), bg="#D2F6E7").pack(side="left", padx=10)
+            if os.name == "nt":   # Windows
+                self.root.iconbitmap(PATH_ICON)
+            else:                  # Linux/Mac
+                icon_img = load_image_proportional(
+                    PATH_ICON.replace(".ico", ".png"),
+                    max_size=(32, 32)
+                )
+                if icon_img:
+                    self.root.iconphoto(True, icon_img)
+        except Exception as e:
+            print(f"Не удалось установить иконку: {e}")
 
+    def build_ui(self):
+        # Шапка с логотипом и заголовком
+        header = tk.Frame(self.root, bg=COLOR_SECONDARY_BG, height=80)
+        header.pack(fill="x")
+        header.pack_propagate(False)
+
+        # Логотип (слева) — с сохранением пропорций!
+        logo = load_image_proportional(PATH_LOGO, max_size=(60, 60))
+        if logo:
+            logo_label = tk.Label(header, image=logo, bg=COLOR_SECONDARY_BG)
+            logo_label.image = logo
+            logo_label.pack(side="left", padx=15)
+        else:
+            tk.Label(header, text="[ЛОГОТИП]",
+                     bg=COLOR_SECONDARY_BG).pack(side="left", padx=15)
+
+        # Заголовок (по центру)
         tk.Label(header, text="КАТАЛОГ ТОВАРОВ",
-                 font=(FONT_FAMILY, 16, "bold"),
-                 bg="#D2F6E7").pack(pady=15)
+                 font=font(FONT_SIZE_TITLE, bold=True),
+                 bg=COLOR_SECONDARY_BG).pack(expand=True)
 
         # Область с прокруткой
         self.canvas = tk.Canvas(self.root, bg="white", highlightthickness=0)
@@ -49,7 +71,7 @@ class CatalogWindow:
         scrollbar.pack(side="right", fill="y")
 
     def load_products(self):
-        products = get_all_products()
+        products = db.get_all_products()
         for p in products:
             create_product_card(self.catalog_frame, p)
 

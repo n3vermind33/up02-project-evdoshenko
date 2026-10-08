@@ -1,4 +1,5 @@
 DB_PATH = "databases/db_variant_26.db"
 APP_TITLE = "Моё Приложение"
-FONT_FAMILY = "Arial"
+FONT_FAMILY = "Calibri"
 COLOR_HIGHLIGHT = "#ff8080"
+COLOR_SECONDARY_BG = "#D2F6E7"

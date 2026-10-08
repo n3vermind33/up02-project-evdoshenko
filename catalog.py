@@ -3,6 +3,7 @@ from tkinter import ttk
 from PIL import Image, ImageTk
 import os
 
+from resources import get_product_image
 from config import DB_PATH, COLOR_HIGHLIGHT, FONT_FAMILY
 import databases as db
 
@@ -70,5 +71,18 @@ def create_product_card(parent, product):
     # === Разделитель между карточками (линия снизу) ===
     separator = tk.Frame(parent, height=1, bg="#000000")
     separator.pack(fill="x", padx=10, pady=(0, 5))
+    
+    img_frame = tk.Frame(card, bg=bg_color)
+    img_frame.pack(side="left", padx=10, pady=10)
+
+    photo = get_product_image(product.image, size=(100, 100))
+    if photo:
+        img_label = tk.Label(img_frame, image=photo, bg=bg_color)
+        img_label.image = photo   # сохраняем ссылку!
+        img_label.pack()
+    else:
+        tk.Label(img_frame, text="[НЕТ ФОТО]", bg=bg_color,
+             width=10, height=5).pack()
+
 
     return card
