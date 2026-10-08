@@ -13,6 +13,9 @@ class Product:
         self.price = float(price)
         self.quantity = int(quantity)
         self.duration = duration
+        
+    def discounted_price(self):
+        return self.price * 0.75
 
     def total(self):
         return self.price * self.quantity
