@@ -17,10 +17,6 @@ class Product:
     def discounted_price(self):
         return self.price * 0.90
 
-    def discounted_price(self):
-        return self.price * 0.80
-
-
     def total(self):
         return self.price * self.quantity
 
