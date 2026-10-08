@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from PIL import Image, ImageTk  # Добавлен импорт для работы с логотипом
 from config import APP_TITLE, FONT_FAMILY
 import databases as db
 from catalog import create_product_card
@@ -19,6 +20,16 @@ class CatalogWindow:
         # Заголовок
         header = tk.Frame(self.root, bg="#D2F6E7")
         header.pack(fill="x")
+        
+        # Добавление логотипа компании
+        try:
+            logo = Image.open("resources/logo.jpg").resize((50, 50))
+            self.logo_photo = ImageTk.PhotoImage(logo)  # Сохраняем ссылку в self
+            tk.Label(header, image=self.logo_photo, bg="#D2F6E7").pack(side="left", padx=10, pady=10)
+        except Exception:
+            # Заглушка, если файл logo.png отсутствует
+            tk.Label(header, text="[ЛОГО]", font=(FONT_FAMILY, 10, "bold"), bg="#D2F6E7").pack(side="left", padx=10)
+
         tk.Label(header, text="КАТАЛОГ ТОВАРОВ",
                  font=(FONT_FAMILY, 16, "bold"),
                  bg="#D2F6E7").pack(pady=15)

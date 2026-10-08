@@ -16,7 +16,7 @@ def create_product_card(parent, product):
     """
     # Определяем фон: подсветка, если количество ≤3
     qty = product.quantity     # ⚠️ Замените индекс на свой!
-    bg_color = COLOR_HIGHLIGHT if qty <= 3 else "white"
+    bg_color = "#ff8080" if qty <= 5 else "white"
 
     # Карточка — рамка со всех сторон
     card = tk.Frame(parent, bg=bg_color, bd=1, relief="solid")
@@ -66,5 +66,9 @@ def create_product_card(parent, product):
     tk.Label(text_frame, text=f"{product.price} руб.",
              font=(FONT_FAMILY, 14, "bold"),
              bg=bg_color, anchor="e").pack(fill="x")
+
+    # === Разделитель между карточками (линия снизу) ===
+    separator = tk.Frame(parent, height=1, bg="#000000")
+    separator.pack(fill="x", padx=10, pady=(0, 5))
 
     return card
