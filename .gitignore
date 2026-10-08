@@ -41,3 +41,7 @@ credentials.txt
 # Временные файлы
 *.tmp
 *.bak
+
+.ipynb_checkpoints/
+~$*.xlsx
+*.db-journal

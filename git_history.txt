@@ -1,0 +1,30 @@
+* 8611ee6 (HEAD -> main, origin/main, origin/HEAD) Добавлен important.txt, лог и tmp проигнорированы
+* c6176cf Обновление gitignore
+* 57fc362 Update homework_info.txt
+*   decd248 Merge pull request #2 from n3vermind33/feature/homework8
+|\  
+| | * f30e2af (origin/feature/homework8, feature/homework8) Update homework_info.txt
+| | * 836ca36 ДЗ test
+| |/  
+| * e30ae99 ДЗ 8 пара
+|/  
+*   3d4dab0 Разрешён конфликт с GitHub
+|\  
+| * 7cca8be Update README.md
+* | d1d895b Локальное изменение README
+|/  
+*   bc8b5f7 Merge pull request #1 from n3vermind33/feature/remote-test
+|\  
+| * 17d169d (origin/feature/remote-test) Добавлен файл в ветке feature/remote-test
+|/  
+* 3ebabe2 Update README.md
+* d9f362e Добавлен метод is_available
+*   993f93a ДЗ: работа с ветками и конфликтами
+|\  
+| * f6885d1 (origin/conflict-2) conflict-2
+* | 33e440d conflict-2
+|/  
+* 7ca076c (origin/feature/orders) Инфо заказа
+* 7a6ccfb Пара 7: работа с ветками и разрешение конфликтов
+*   4f6641b Merge branch 'main' of https://github.com/n3vermind33/up02-project-evdoshenko
+|\  
