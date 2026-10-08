@@ -14,6 +14,11 @@ class Product:
         self.quantity = int(quantity)
         self.duration = duration
         
+    def is_available(self):
+        """Товар доступен для заказа?"""
+        return self.quantity > 0
+
+        
     def discounted_price(self):
         return self.price * 0.90
 
