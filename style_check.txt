@@ -1,0 +1,2 @@
+COLOR_PRIMARY_BG   = "#FFFFFF"   # основной фон
+COLOR_SECONDARY_BG = "#D2F6E7"   # фон шапки / вторичные блоки

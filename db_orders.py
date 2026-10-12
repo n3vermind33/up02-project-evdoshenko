@@ -20,7 +20,8 @@ def get_all_products_map():
             city=row[2],
             price=row[4],
             quantity=row[5],
-            duration=row[3]
+            duration=row[3],
+            image = row[6]
         )
         products[p.id] = p
     return products
@@ -51,7 +52,8 @@ def get_all_orders():
             date=row[1],
             client=row[2],
             product=product,
-            quantity=row[4]
+            quantity=row[4],
+            image = row[6]
         )
         orders.append(order)
     return orders

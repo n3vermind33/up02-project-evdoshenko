@@ -4,8 +4,8 @@ from PIL import Image, ImageTk
 
 # Пути к ресурсам
 PATH_PICTURE = "resources/picture.png"
-PATH_LOGO = "resources/logo.png"
-PATH_ICON = "resources/icon.ico"
+PATH_LOGO = "resources/logo.jpg"
+PATH_ICON = "resources/icon.png"
 
 # Кэш изображений
 _image_cache = {}

@@ -1,10 +1,12 @@
 import tkinter as tk
 from tkinter import ttk
-from config import COLOR_SECONDARY_BG, FONT_FAMILY #FONT_SIZE_TITLE, font
+from config import COLOR_SECONDARY_BG, FONT_FAMILY, FONT_SIZE_TITLE
 from config import APP_TITLE
 import databases as db
 from catalog import create_product_card
 from resources import load_image_proportional, PATH_LOGO, PATH_ICON
+from db_products import get_all_products
+
 
 
 class CatalogWindow:
@@ -15,7 +17,6 @@ class CatalogWindow:
 
         # Иконка приложения
         self.set_icon()
-
         self.build_ui()
         self.load_products()
 
@@ -25,13 +26,6 @@ class CatalogWindow:
         try:
             if os.name == "nt":   # Windows
                 self.root.iconbitmap(PATH_ICON)
-            else:                  # Linux/Mac
-                icon_img = load_image_proportional(
-                    PATH_ICON.replace(".ico", ".png"),
-                    max_size=(32, 32)
-                )
-                if icon_img:
-                    self.root.iconphoto(True, icon_img)
         except Exception as e:
             print(f"Не удалось установить иконку: {e}")
 
@@ -53,8 +47,8 @@ class CatalogWindow:
 
         # Заголовок (по центру)
         tk.Label(header, text="КАТАЛОГ ТОВАРОВ",
-                 font=font(FONT_SIZE_TITLE, bold=True),
-                 bg=COLOR_SECONDARY_BG).pack(expand=True)
+            font=(FONT_FAMILY, FONT_SIZE_TITLE, "bold"),
+            bg=COLOR_SECONDARY_BG).pack(expand=True)
 
         # Область с прокруткой
         self.canvas = tk.Canvas(self.root, bg="white", highlightthickness=0)
@@ -71,7 +65,7 @@ class CatalogWindow:
         scrollbar.pack(side="right", fill="y")
 
     def load_products(self):
-        products = db.get_all_products()
+        products = get_all_products()
         for p in products:
             create_product_card(self.catalog_frame, p)
 
