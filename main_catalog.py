@@ -22,10 +22,9 @@ class CatalogWindow:
 
     def set_icon(self):
         """Устанавливает иконку приложения (кроссплатформенно)."""
-        import os
         try:
-            if os.name == "nt":   # Windows
-                self.root.iconbitmap(PATH_ICON)
+            self._icon = tk.PhotoImage(file=PATH_ICON)
+            self.root.iconphoto(True, self._icon)
         except Exception as e:
             print(f"Не удалось установить иконку: {e}")
 

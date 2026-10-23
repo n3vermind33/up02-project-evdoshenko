@@ -10,7 +10,7 @@ from db_products import get_all_products
 
 def create_product_card(parent, product):
     """Создаёт карточку товара по макету."""
-    qty=product[5]
+    qty = product.quantity
     bg_color = _get_card_color(qty)
 
     card = tk.Frame(parent, bg=bg_color, bd=1, relief="solid")
@@ -32,7 +32,7 @@ def _add_image(card, product, bg_color):
     img_frame = tk.Frame(card, bg=bg_color)
     img_frame.pack(side="left", padx=10, pady=10)
 
-    photo = get_product_image(product[6], size=(100, 100))   # ⚠️ индекс!
+    photo = get_product_image(product.image, size=(100, 100))
     if photo:
         img_label = tk.Label(img_frame, image=photo, bg=bg_color)
         img_label.image = photo
@@ -43,23 +43,33 @@ def _add_image(card, product, bg_color):
 
 
 def _add_text_info(card, product, bg_color, qty):
-    """Добавляет текстовую информацию о товаре."""
+    """Добавляет текстовую информацию о туре."""
     text_frame = tk.Frame(card, bg=bg_color)
     text_frame.pack(side="left", fill="both", expand=True, padx=10, pady=10)
 
-    _add_label(text_frame, f"{product[3]} | {product[1]}",
+    # Значения с проверкой на пустоту (крайние случаи)
+    country  = product.country  if product.country  else "[Страна не указана]"
+    city     = product.city     if product.city     else "[Город не указан]"
+    duration = product.duration if product.duration else "[Длительность не указана]"
+    price    = product.price    if product.price is not None else 0
+
+    # Заголовок: «Страна | Город»
+    _add_label(text_frame, f"{country} | {city}",
                bg_color, bold=True, size=FONT_SIZE_HEADER)
-    _add_label(text_frame, f"Категория: {product[2]}", bg_color)
+    # Длительность тура
+    _add_label(text_frame, f"Длительность: {duration}", bg_color)
+    # Количество (с индикатором «много/мало»)
     _add_label(text_frame, f"Количество: {_indicator(qty)} ({qty})", bg_color)
-    _add_label(text_frame, f"Состав: {product[4]}", bg_color)
-    _add_label(text_frame, f"{product[5]} руб.",
+    # Цена
+    _add_label(text_frame, f"{price} руб.",
                bg_color, bold=True, size=FONT_SIZE_HEADER, align="e")
 
 
 def _add_label(parent, text, bg_color, bold=False,
                size=FONT_SIZE_NORMAL, align="w"):
     """Добавляет метку с текстом."""
-    tk.Label(parent, text=text, font=font(size, bold=bold),
+    tk.Label(parent, text=text,
+             font=(FONT_FAMILY, size, "bold" if bold else "normal"),
              bg=bg_color, anchor=align).pack(fill="x")
 
 
